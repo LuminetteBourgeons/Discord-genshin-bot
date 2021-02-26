@@ -33,8 +33,10 @@ async def hreminder(ctx, time: int, *, msg):
         await ctx.send(f'{msg}, {ctx.author.mention}')
 
 @bot.command()
-async def say(ctx, arg):
-    await ctx.send(arg)
+@commands.is_owner()
+async def say(ctx,* ,msg):
+    await ctx.message.delete()
+    await ctx.send(msg)
 
 @bot.command()
 async def avatar(ctx, *,  avamember : discord.Member=None):
