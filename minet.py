@@ -183,7 +183,7 @@ async def on_message(message):
        await bot.process_commands(message)
 
     if any(word in message.content for word in love_u):
-      if message.author.id == 236823518233362442:
+      if message.author.id == 236823518233362442: #id siapa hayo 
        await message.add_reaction ('❤️')
 
 keep_alive()
