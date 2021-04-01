@@ -14,29 +14,26 @@ import asyncio
 from asyncio import sleep
 #from keep_alive import keep_alive
 
-presence = 
-[
-    discord.Activity(type=discord.ActivityType.watching, name=("Primordial World")),
-    discord.Activity(type=discord.ActivityType.watching, name=("Childe ❤️")),
-    discord.Activity(type=discord.ActivityType.watching, name=("Alvard galak")),
-    discord.Activity(type=discord.ActivityType.playing, name=("with Mayonese")),
-    discord.Activity(type=discord.ActivityType.playing, name=("with Moderators")),
-    discord.Activity(type=discord.ActivityType.playing, name=("Develop by luminet")),
-    discord.Activity(type=discord.ActivityType.playing, name=("prefix: 'net, '"))
-    discord.Activity(type=discord.ActivityType.competing, name=("with Paidoru")),
-    discord.Activity(type=discord.ActivityType.competing, name=("#💬・public-chat")),
+owner= [
+  809244553768861706, #brianynne
+  743042741461712897  #luminette
 ]
 
-love_u = #buat bucinan ehe 
-[
+presence= [
+    discord.Activity(type=discord.ActivityType.watching, name=("Childe ❤️")),
+    discord.Activity(type=discord.ActivityType.playing, name=("with Xiao")),
+    discord.Activity(type=discord.ActivityType.playing, name=("prefix: 'minet, '")),
+]
+
+love_u = [ #buat bucinan ehe
   'Love you', 
   'love u', 
   'love you', 
   'Love u'
 ]
 
-luminet = 
-[
+'''
+luminet = [
   "Luminette", 
   "luminette", 
   "Luminet", 
@@ -44,42 +41,58 @@ luminet =
   "Minet", 
   "minet"
 ]
+'''
 
-curse_words = 
-[
-  "fuck",
-  "shit", 
-  "piss", 
-  "dick", 
-  "asshole",
-  "bitch", 
-  "cunt",
-  "anjing", 
-  "bangsat", 
-  "ngentot", 
+curse_words = [
+  "fuck", "FUCK",
+  "shit", "SHIT",
+  "piss", "PISS",
+  "dick", "DICK",
+  "cock", "COCK",
+  "asshole", "ASSHOLE",
+  "bitch", "BITCH",
+  "cunt", "CUNT",
+  "anjing", "ANJING",
+  "bangsat", "BANGSAT",
+  "ngentot", "NGENTOT",
   "peepee", 
   "poopoo", #idek why
-  "pussy", 
-  "damn"
+  "pussy", "PUSSY",
+  "kontol", "KONTOL",
+  "memek", "MEMEK",
+  "memeq", "MEMEQ"
 ]
 
-shut = 
-[
-  "Language!!", "Hey! >:(", "Hey, watch it.", "Ngomongnya ya! >:(", "Heh! >:("
+shut = [
+  "Language.", "Hey! >:(", "Ngomongnya ya >:(", "Heh! >:("
 ]
-answer = ["hm?", "ya?", "apa?", "ada apa?"]
 
-bot = commands.Bot(command_prefix="net, ", case_insensitive=True)
+answer = [
+  "hm?", "ya?", "apa?"
+  ]
+
+PREFIX = [
+  "Minet, ",
+  "Minet,",
+  "minet, ",
+  "minet,"
+]
+
+bot = commands.Bot(command_prefix=PREFIX, case_insensitive=True, help_command=None)
 
 
 @bot.event
 async def on_ready():
-    await bot.change_presence(activity=
-                              discord.Activity(type=discord.ActivityType.competing, name=("booting...")))
+    await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.competing, name=("booting...")))
     await asyncio.sleep(5)
-    await bot.change_presence(activity=
-                              discord.Activity(type=discord.ActivityType.competing, name=("development")))
+    await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.competing, name=("development")))
     print('Luminette is online.')
+
+@bot.command
+async def help(ctx):
+    embed = discord.Embed(title="Luminette's bot commands:", description="prefix: `minet,`, `Minet,`", color=discord.Color.orange())
+    embed.set_thumbnail(url=bot.icon_url)
+    await ctx.send(embed=embed)
 
 @loop(minutes=5)
 async def presence_change():
@@ -180,6 +193,37 @@ async def avatar(ctx, user: discord.User = None):
     await ctx.send(embed=embed)
     
 @bot.command()
+async def userinfo(ctx, user: discord.User = None):
+    pass
+    if user is None:
+        user = ctx.author
+    name = f'{user.name}'
+    nick = f'{user.nick}'
+    if nick is None:
+     nick = name
+    id = f'`{user.id}`'
+    status = f'`{user.status}`' #masih error 
+    voice_state = None if not user.voice else user.voice.channel
+    voice = f'`{voice_state}`'
+    activity = f'`{user.activity}`'
+    role = f'{user.top_role.name}'
+    if role == "@everyone":
+     role = "None"
+    icon = f'{user.avatar_url}'
+    embed = discord.Embed(title=name + "'s Information",
+                          color=discord.Color.orange())
+    embed.set_thumbnail(url=icon)
+    embed.add_field(name="User Nickname", value=nick, inline=True)
+    embed.add_field(name="User ID", value=id, inline=True)
+    embed.add_field(name="Status", value=status, inline=True)
+    embed.add_field(name="In Voice", value=voice, inline=True)
+    embed.add_field(name="In Activity", value=activity, inline=True)
+    embed.add_field(name="Highest Role", value=role, inline=True)
+    embed.add_field(name='Account Created', value=user.created_at.__format__('%A, %d. %B %Y @ %H:%M:%S'))
+    embed.add_field(name='Join Date', value=user.joined_at.__format__('%A, %d. %B %Y @ %H:%M:%S'))
+    await ctx.send(embed=embed)
+
+@bot.command()
 async def servericon(ctx):
     embed = discord.Embed(title=f'{ctx.guild.name} server icon.',
                           url=f"{ctx.guild.icon_url}",
@@ -204,6 +248,12 @@ async def serverinfo(ctx):
     embed.add_field(name="Member Count", value=memberCount, inline=True)
     await ctx.send(embed=embed)
 
+@bot.command()
+@commands.has_permissions(administrator=True)
+async def dm(ctx, user: discord.User, *, value):
+  await user.send(f"**{value}**")
+  await user.send(f"||Sent by {ctx.author.name}||")
+  await ctx.send("DM sent!")
 
 @bot.command()
 @commands.has_permissions(administrator=True)
@@ -223,33 +273,23 @@ async def warn(ctx, user: discord.User = None):
 @bot.command()
 async def reminder(ctx, time, *, reminder):
     embed = discord.Embed(color=discord.Colour.orange())
-    embed.set_footer(icon_url=f"{bot.user.avatar_url}")
+    embed.set_footer(icon_url=f'{bot.user.avatar_url}')
     seconds = 0
-    if reminder is None:
-        embed.add_field(
-            name='Warning',
-            value='Please specify what do you want me to remind you about.')
     if time.lower().endswith("d"):
         seconds += int(time[:-1]) * 60 * 60 * 24
-        counter = f"{seconds // 60 // 60 // 24} days"
+        counter = f"{seconds // 60 // 60 // 24} day(s)"
     if time.lower().endswith("h"):
         seconds += int(time[:-1]) * 60 * 60
-        counter = f"{seconds // 60 // 60} hours"
+        counter = f"{seconds // 60 // 60} hour(s)"
     elif time.lower().endswith("m"):
         seconds += int(time[:-1]) * 60
-        counter = f"{seconds // 60} minutes"
+        counter = f"{seconds // 60} minute(s)"
     elif time.lower().endswith("s"):
         seconds += int(time[:-1])
-        counter = f"{seconds} seconds"
+        counter = f"{seconds} second(s)"
     if seconds == 0:
         embed.add_field(name='Warning',
                         value='Please specify a proper duration :(')
-    elif seconds < 300:
-        embed.add_field(
-            name='Warning',
-            value=
-            'You have specified a too short duration!\nMinimum duration is 5 minutes.'
-        )
     elif seconds > 7776000:
         embed.add_field(
             name='Warning',
@@ -260,8 +300,7 @@ async def reminder(ctx, time, *, reminder):
         await ctx.send(
             f"Alright, I will remind you about {reminder} in {counter}.")
         await asyncio.sleep(seconds)
-        await ctx.send(
-            f"Hi, you asked me to remind you about {reminder} {counter} ago.")
+        await ctx.author.send(f"Hi, you asked me to remind you about {reminder} {counter} ago.")
         return
     await ctx.send(embed=embed)
 
@@ -285,29 +324,59 @@ async def leave(ctx):
     await asyncio.sleep(5)
     await ctx.message.delete()
 
-
 @bot.event
 async def on_message(message):
     if message.author == bot.user:
         return
     await bot.process_commands(message)
 
-    if any(word in message.content for word in curse_words):
+    for i in curse_words:
+      if i in message.content.lower():
+        print(f"{message.content}, said {message.author}")
         await asyncio.sleep(2)
         await message.delete()
         await message.channel.send(random.choice(shut))
+        bot.dispatch('profanity', message, i)
+        return
         await bot.process_commands(message)
+    
+    if any(word in message.content for word in love_u):
+        if message.author.id == 236823518233362442:
+            await message.add_reaction('❤️')
+    
+    if message.content.lower().startswith ("Tes"):
+      me = await bot.get_user_info(message.author_id)
+      await bot.send_message(me, "Tis")
 
+'''
     if any(word in message.content for word in luminet):
         await asyncio.sleep(1)
         await message.channel.send(random.choice(answer))
         await bot.process_commands(message)
+'''
 
-    if any(word in message.content for word in love_u):
-        if message.author.id == 236823518233362442:
-            await message.add_reaction('❤️')
+@bot.event
+async def on_profanity(message, word):
+   channel = bot.get_channel(825190542115078164)
+   embed = discord.Embed(title="Profanity Alert!",description=f"{message.author.name} just said ||{word}||", color=discord.Color.orange()) 
+   await channel.send(embed=embed)
+
+@bot.command()
+async def pstart(ctx):
+  if ctx.author.id == 809244553768861706 or ctx.author.id == 743042741461712897:
+    presence_change.start()
+    await ctx.send("Auto presence-changing started.")
+  else:
+    await ctx.send("You are not allowed to use this command!")
 
 
-presence_change.start()
+@bot.command()
+async def pstop(ctx):
+  if ctx.author.id == 809244553768861706 or ctx.author.id == 743042741461712897:
+    presence_change.cancel()
+    await ctx.send("Auto presence-changing has stopped.")
+  else:
+    await ctx.send("You are not allowed to use this command!")
+
 #keep_alive()
 bot.run(os.getenv('TOKEN'))
