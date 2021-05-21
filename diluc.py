@@ -2,6 +2,11 @@
 # Didedikasikan untuk Discord server Rumah Mine
 # Masih dikembangkan biar Mine makin halu.
 
+
+
+# Development stopped. 
+# ganti jadi venti, discord.js
+
 import discord
 from discord.ext import commands
 import os
