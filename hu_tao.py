@@ -1,7 +1,7 @@
 # WORK IN PROGRESS
 # Requestan Septo :)
 
-# Development stopped
+# Development stopped.
 
 import discord
 from discord.ext import commands
